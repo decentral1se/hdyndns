@@ -1,0 +1,17 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+
+[dev-packages]
+ipdb = "*"
+isort = "*"
+mypy = "*"
+pylava = "*"
+pytest = "*"
+pytest-mock = "*"
+pytest-watch = "*"
+tox = "*"
+twine = "*"
