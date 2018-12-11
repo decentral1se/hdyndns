@@ -1,6 +1,12 @@
 # hdyndns
 
-A GNU/Linux Python 3.5+ DynDNS client for your homebrew server.
+A GNU/Linux Python 3.5+ [Dynamic DNS] client for your homebrew server.
+
+[Dynamic DNS]: https://en.wikipedia.org/wiki/Dynamic_DNS
+
+It's lightweight, with no external dependencies and is simple to configure.
+
+See below for documentation about motivation, usage and configuration options.
 
 ## When To Use It
 
@@ -22,17 +28,27 @@ This tool is the 'Local Update Client' component of the Dynamic DNS hombrew setu
 
 ## How To Use It
 
-The following examples were run on a [Debian system].
+The following examples were run on a [Debian system] using the [Gandi DNS provider].
 
 [Debian system]: https://www.debian.org/
+[Gandi DNS provider]: #supported-dns-providers
+
+Make sure you have the necessary system prerequisites with:
 
 ```bash
-$ sudo apt update && sudo apt install -y python3 python3-dev python3-pip
+$ sudo apt update
+$ sudo apt install -y python3 python3-dev python3-pip
+```
+
+And then install `hdyndns` with:
+
+```bash
 $ sudo useradd -m hdyndns
 $ sudo -u hdyndns pip3 install --user hdyndns
 ```
 
-If you have DNS records for `baz.com` and subdomains that looks like:
+If you have an DNS A record for `mysite.com` and subdomains `foo.mysite.com`
+and `bar.mysite.come` that looks like the following:
 
 ```
 @   1800 IN A 86.91.199.200
@@ -43,37 +59,42 @@ bar 1800 IN A 86.91.199.200
 Then create a configuration file at `/home/hdyndns/.hdyndns/hdyndns.ini`:
 
 ```config
-[baz.com]
+[mysite.com]
 provider = gandi
-api_secret = passw0rd
+api_secret = mySuperSecretApiPassword
 subdomains = foo,bar
 ```
 
-This configuration makes sure to keep `baz.com` and the subdomains
-`foo.baz.com`, `bar.baz.com` entries up to date.
+This configuration makes sure to keep `mysite.com` and the subdomains up to
+date.
 
-Finally, add it your crontab to run every 5 minutes:
+Finally, add it your root crontab (`sudo crontab -e`) to run it every 15 minutes:
 
 ```bash
-*/5 * * * * su - hdyndns -c '/home/hdyndns/.local/bin/hdyndns' &>/dev/null
+*/15 * * * * runuser -l hdyndns -c '$HOME/.local/bin/hdyndns' &>/dev/null
 ```
 
-We configure the logging level to only output messages when it fails.
+Regarding the `&>/dev/null` part, see [issue #1](https://git.coop/decentral1se/hdyndns/issues/1).
 
 ## Known Limitations
 
 * Different IP addresses for subdomains are currently not supported.
 
-## Supported Providers
+Please open [an issue] if you want to collaborate on removing these limitations.
+
+[an issue]: https://git.coop/decentral1se/hdyndns/issues
+
+## Supported DNS Providers
 
 * [Gandi](https://www.gandi.net/en)
 
 Any DNS provider can be supported if they provide some programmatic way to
-update their DNS records. If your current DNS provider is not listed above,
-please contact the package maintainer (see `setup.py` for more details). If
-you'd like to add it yourself, take a look at [hdyndns/providers.py]. All
+update their DNS records (for example, if they have a public API). If your
+current DNS provider is not listed above, please [raise an issue]. If you'd
+like to add it yourself, take a look at [hdyndns/providers.py]. All
 contributions welcome!
 
+[raise an issue]: https://git.coop/decentral1se/hdyndns/issues
 [hdyndns/providers.py]: hdyndns/providers.py
 
 ## Configuration Options
@@ -96,18 +117,17 @@ The DNS [time to live] counter in secods. Default is `1800`.
 
 [time to live]: https://en.wikipedia.org/wiki/Time_to_live
 
-## How to Hack It
+## How To Help
 
-We use [pipenv], [pytest] and [tox] for development.
+You'll need to install [pipenv] for development.
 
 [pipenv]: https://pipenv.readthedocs.io/en/latest/
-[pytest]: https://docs.pytest.org/en/latest/
-[tox]: https://tox.readthedocs.io/en/latest/
 
+You can follow these steps to get a working local installation:
 
 ```bash
-$ pipenv install --dev
-$ pipenv run pip install -e .
-$ pipenv run hdyndns --help
-$ pipenv run tox -e py37
+$ pipenv install --dev  # install the dependencies
+$ pipenv run pip install -e .  # install the local hdyndns
+$ pipenv run hdyndns --help  # check that the local hdynds is working
+$ pipenv run tox -e py37  # run the tests on python 3.7 (run `tox -l` to see pythons)
 ```
