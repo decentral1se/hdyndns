@@ -5,14 +5,14 @@ with open('README.md', 'r') as handle:
 
 setup(
     name='hdyndns',
-    version='0.0.4',
+    version='0.0.5',
     url='',
     license='GPLv3',
     author='Luke M.',
     author_email='lukewm@riseup.net',
     description=(
-        'A GNU/Linux Python 3.5+ DynDNS client '
-        'for your homebrew server'
+        'A GNU/Linux Python 3.5+ Dynamic DNS client '
+        'for your homebrew server.'
     ),
     long_description=long_description,
     long_description_content_type='text/markdown',

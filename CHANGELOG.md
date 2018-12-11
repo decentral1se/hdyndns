@@ -9,6 +9,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ---
 
+## [0.0.5] - 2018-12-11
+
+* Improve documentation.
+* Make releases as `bdist_wheel` instead of `sdist`.
+
 ## [0.0.4] - 2018-11-05
 
 ### Fixed
