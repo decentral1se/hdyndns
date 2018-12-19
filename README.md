@@ -4,10 +4,6 @@ A GNU/Linux Python 3.5+ [Dynamic DNS] client for your homebrew server.
 
 [Dynamic DNS]: https://en.wikipedia.org/wiki/Dynamic_DNS
 
-It's lightweight, with no external dependencies and is simple to configure.
-
-See below for documentation about motivation, usage and configuration options.
-
 ## When To Use It
 
 From [Access Your Home Network From Anywhere With Dynamic DNS]:
@@ -25,6 +21,14 @@ From [Access Your Home Network From Anywhere With Dynamic DNS]:
 > manually editing your DDNS entry.
 
 This tool is the 'Local Update Client' component of the Dynamic DNS hombrew setup.
+
+## Why To Use It
+
+* Lightweight with no external Python dependencies.
+* Simple 'ini style' configuration.
+* Avoid writing hard to maintain Dynamic DNS bash scripts.
+* Small code base, easy to understand, maintain and extend and is cross platform.
+* Will be maintained going forward and is being used in existing homebrew setups.
 
 ## How To Use It
 
@@ -65,9 +69,6 @@ api_secret = mySuperSecretApiPassword
 subdomains = foo,bar
 ```
 
-This configuration makes sure to keep `mysite.com` and the subdomains up to
-date.
-
 Finally, add it your root crontab (`sudo crontab -e`) to run it every 15 minutes:
 
 ```bash
@@ -99,21 +100,10 @@ contributions welcome!
 
 ## Configuration Options
 
-### provider
-
-The DNS provider.
-
-### api_secret
-
-The API secret for the DNS provider.
-
-### subdomains
-
-Optional comma separated list of subdomains to also update DNS entries for.
-
-### ttl
-
-The DNS [time to live] counter in secods. Default is `1800`.
+* `provider`: The DNS provider.
+* `api_secret`: The API secret for the DNS provider.
+* `subdomains`: Optional comma separated list of subdomains to also update DNS entries for.
+* `ttl`: The DNS [time to live] counter in secods. Default is `1800`.
 
 [time to live]: https://en.wikipedia.org/wiki/Time_to_live
 

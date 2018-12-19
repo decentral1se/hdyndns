@@ -5,7 +5,7 @@ with open('README.md', 'r') as handle:
 
 setup(
     name='hdyndns',
-    version='0.0.5',
+    version='0.0.6',
     url='',
     license='GPLv3',
     author='Luke M.',
