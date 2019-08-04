@@ -121,3 +121,9 @@ $ pipenv run pip install -e .  # install the local hdyndns
 $ pipenv run hdyndns --help  # check that the local hdynds is working
 $ pipenv run tox -e py37  # run the tests on python 3.7 (run `tox -l` to see pythons)
 ```
+
+## Mirroring
+
+* [hack.decentral1.se/decentral1se/hdyndns](https://hack.decentral1.se/decentral1se/hdyndns) (primary)
+* [github.com/decentral1se/hdyndns](https://github.com/decentral1se/hdyndns)
+* [git.coop/decentral1se/hdyndns](https://git.coop/decentral1se/hdyndns) (deprecated)
