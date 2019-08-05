@@ -1,4 +1,12 @@
 *.egg-info/
-dist/
+*.pyc
+.coverage
+.eggs/
+.mypy_cache/
 .tox/
+.venv/
+__pycache__
 build/
+dist/
+pip-wheel-metadata/
+documentation/build/

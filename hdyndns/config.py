@@ -23,23 +23,19 @@ def get_user() -> str:
         exit(EXIT_CODE_1_BAD)
 
 
-def create_home(user: str,
-                root: Union[str, None] = None) -> None:
+def create_home(user: str, root: Union[str, None] = None) -> None:
     """Create the home configuration folder."""
     home_path = '{root}/{user}/.hdyndns'.format(
-        root=root if root else '/home',
-        user=user,
+        root=root if root else '/home', user=user
     )
     if not exists(home_path):
         makedirs(home_path)
 
 
-def read_config(user: str,
-                root: Union[str, None] = None) -> Any:
+def read_config(user: str, root: Union[str, None] = None) -> Any:
     """Read the INI configuration file."""
     cfg_path = '{root}/{user}/.hdyndns/hdyndns.ini'.format(
-        root=root if root else '/home',
-        user=user,
+        root=root if root else '/home', user=user
     )
 
     config = ConfigParser()

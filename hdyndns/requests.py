@@ -18,9 +18,7 @@ def get(url, headers=None, load_json=True):
     try:
         request = Request(url, headers=headers, method='GET')
         response = (
-            urlopen(request, timeout=REQUEST_TIMEOUT)
-            .read()
-            .decode('utf-8')
+            urlopen(request, timeout=REQUEST_TIMEOUT).read().decode('utf-8')
         )
         if not load_json:
             return response
