@@ -107,7 +107,7 @@ class GandiDynDNS:
             if dns_ip == dynamic_ip:
                 message = 'DNS {} record and Dynamic IP for {} match'
                 logger.info(message.format(self.dns_type[ip_v], self.domain))
-                continue
+                return
 
             headers = {
                 'X-Api-Key': self.api_secret,
