@@ -39,6 +39,7 @@ Then create a configuration file at ``/home/hdyndns/.hdyndns/hdyndns.ini``:
     provider = gandi
     api_secret = mySuperSecretApiPassword
     subdomains = foo,bar
+    ip_versions = 4,6
 
 Finally, add it your root crontab (``sudo crontab -e``) to run it every 15 minutes:
 

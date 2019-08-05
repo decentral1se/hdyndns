@@ -8,7 +8,7 @@ from typing import List
 
 from hdyndns import logger
 from hdyndns.requests import get, put
-from hdyndns.settings import EXIT_CODE_0_OK, EXIT_CODE_1_BAD
+from hdyndns.settings import EXIT_CODE_1_BAD
 
 
 class GandiDynDNS:
@@ -20,7 +20,12 @@ class GandiDynDNS:
         self.api_secret = section['api_secret']
         self.domain = section._name
         self.subdomains = self.parse_subdomains(section)
-        self.ip_provider = 'https://api.ipify.org?format=json'
+        self.ip_provider = {
+            '4': 'https://api.ipify.org?format=json',
+            '6': 'https://api6.ipify.org/?format=json',
+        }
+        self.dns_type = {'4': 'A', '6': 'AAAA'}
+        self.ip_versions = section.get('ip_versions', '4').split(',')
         self.ttl = section.get('ttl', '1800')
         self.section = section
 
@@ -31,9 +36,9 @@ class GandiDynDNS:
             return subdomains.split(',')
         return []
 
-    def get_dynamic_ip(self) -> str:
+    def get_dynamic_ip(self, ip_version) -> str:
         """Retrieve the dynamic IP address."""
-        response = get(self.ip_provider)
+        response = get(self.ip_provider[ip_version])
 
         message = 'Discovered dynamic IP of {} for {}'
         logger.info(message.format(response['ip'], self.domain))
@@ -68,56 +73,57 @@ class GandiDynDNS:
             logger.critical(message.format(subdomains, self.domain))
             exit(EXIT_CODE_1_BAD)
 
-    def get_dns_ip(self, zone_uuid: str) -> str:
-        """Get the DNS A @ record."""
+    def get_dns_ip(self, zone_uuid: str, dns_type: str) -> str:
+        """Get the DNS A (or AAAA for ipv6) @ record."""
 
         url = '{}/zones/{}/records'.format(self.api, zone_uuid)
         headers = {'X-Api-Key': self.api_secret}
         response = get(url, headers=headers)
 
-        try:
-            tld_a_record = [
-                entry
-                for entry in response
-                if entry['rrset_type'] == 'A' and entry['rrset_name'] == '@'
-            ]
+        tld_a_record = [
+            entry
+            for entry in response
+            if entry['rrset_type'] == dns_type and entry['rrset_name'] == '@'
+        ]
+
+        ip_record = ''
+        if len(tld_a_record) > 0:
             ip_record = tld_a_record[0]['rrset_values'][0]
 
-            self.validate_subdomain_entries(response)
+        self.validate_subdomain_entries(response)
 
-            message = 'Discovered IP address of {} for {} DNS A @ record'
-            logger.info(message.format(ip_record, self.domain))
+        message = 'Discovered IP address of {} for {} DNS {} @ record'
+        logger.info(message.format(ip_record, self.domain, dns_type))
 
-            return ip_record
-        except (KeyError, IndexError):
-            message = 'Could not find A record for {}'.format(self.domain)
-            logger.critical(message)
-            exit(EXIT_CODE_1_BAD)
+        return ip_record
 
     def update_dns(self):
         """Update the DNS records."""
         zone_uuid = self.get_zone_uuid()
-        dns_ip = self.get_dns_ip(zone_uuid)
-        dynamic_ip = self.get_dynamic_ip()
+        for ip_v in self.ip_versions:
+            dns_ip = self.get_dns_ip(zone_uuid, self.dns_type[ip_v])
+            dynamic_ip = self.get_dynamic_ip(ip_v)
 
-        if dns_ip == dynamic_ip:
-            message = 'DNS A record and Dynamic IP for {} match'
-            logger.info(message.format(self.domain))
-            exit(EXIT_CODE_0_OK)
+            if dns_ip == dynamic_ip:
+                message = 'DNS {} record and Dynamic IP for {} match'
+                logger.info(message.format(self.dns_type[ip_v], self.domain))
+                continue
 
-        headers = {
-            'X-Api-Key': self.api_secret,
-            'Content-type': 'application/json',
-        }
-
-        for name in ['@'] + self.subdomains:
-            url = '{}/zones/{}/records/{}/A'.format(self.api, zone_uuid, name)
-            payload = {
-                'rrset_name': name,
-                'rrset_values': [dynamic_ip],
-                'rrset_ttl': self.ttl,
+            headers = {
+                'X-Api-Key': self.api_secret,
+                'Content-type': 'application/json',
             }
-            put(url, payload, headers=headers)
-            logger.info('Updated {} entry with IP {}'.format(name, dynamic_ip))
 
-        exit(EXIT_CODE_0_OK)
+            for name in ['@'] + self.subdomains:
+                url = '{}/zones/{}/records/{}/{}'.format(
+                    self.api, zone_uuid, name, self.dns_type[ip_v]
+                )
+                payload = {
+                    'rrset_name': name,
+                    'rrset_values': [dynamic_ip],
+                    'rrset_ttl': self.ttl,
+                }
+                put(url, payload, headers=headers)
+                logger.info(
+                    'Updated {} entry with IP {}'.format(name, dynamic_ip)
+                )
