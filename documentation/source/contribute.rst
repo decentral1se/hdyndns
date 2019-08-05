@@ -1,1 +1,5 @@
+**********
+Contribute
+**********
+
 .. include:: ../../CONTRIBUTING.rst

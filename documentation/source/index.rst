@@ -8,5 +8,8 @@ Table of Contents
 
    install
    usage
+   known-limitations
+   supported-providers
+   configuration-reference
    contribute
    changelog
