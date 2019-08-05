@@ -4,8 +4,11 @@
 
 from hdyndns import logger
 from hdyndns.config import (
-    create_home, get_user, read_config, validate_api_secrets,
-    validate_dns_providers
+    create_home,
+    get_user,
+    read_config,
+    validate_api_secrets,
+    validate_dns_providers,
 )
 from hdyndns.providers import GandiDynDNS
 from hdyndns.settings import EXIT_CODE_0_OK, EXIT_CODE_1_BAD

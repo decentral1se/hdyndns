@@ -4,8 +4,11 @@ from tempfile import TemporaryDirectory
 import pytest
 
 from hdyndns.config import (
-    create_home, get_user, read_config, validate_api_secrets,
-    validate_dns_providers
+    create_home,
+    get_user,
+    read_config,
+    validate_api_secrets,
+    validate_dns_providers,
 )
 
 

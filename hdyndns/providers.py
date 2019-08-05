@@ -11,7 +11,7 @@ from hdyndns.requests import get, put
 from hdyndns.settings import EXIT_CODE_0_OK, EXIT_CODE_1_BAD
 
 
-class GandiDynDNS():
+class GandiDynDNS:
     """The Gandis DNS provider DynDNS handler."""
 
     def __init__(self, section, *args, **kwargs):
@@ -77,9 +77,9 @@ class GandiDynDNS():
 
         try:
             tld_a_record = [
-                entry for entry in response
-                if entry['rrset_type'] == 'A'
-                and entry['rrset_name'] == '@'
+                entry
+                for entry in response
+                if entry['rrset_type'] == 'A' and entry['rrset_name'] == '@'
             ]
             ip_record = tld_a_record[0]['rrset_values'][0]
 
