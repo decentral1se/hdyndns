@@ -1,3 +1,27 @@
+Hdyndns 0.0.7rc1 (2019-08-05)
+=============================
+
+Trivial/Internal Changes
+------------------------
+
+- Migrate to new packaging format.
+
+Improved Documentation
+----------------------
+
+- Put documentation on readthedocs.io.
+
+Features
+--------
+
+- Allow to specify which IP versions to use (#10)
+
+Bug Fixes
+---------
+
+- Fix support for multi-sections (#11)
+
+
 Hdyndns 0.0.6 (2018-12-19)
 ==========================
 
