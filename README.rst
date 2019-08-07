@@ -29,6 +29,10 @@ hdyndns
 A GNU/Linux Python 3.5+ DynDNS client for your homebrew server
 --------------------------------------------------------------
 
+Please note, you should probably use the more complete and useful `lexicon`_.
+
+.. _lexicon: https://github.com/analogj/lexicon
+
 When to use hdyndns
 -------------------
 
