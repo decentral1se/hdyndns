@@ -63,7 +63,6 @@ Why use hdyndns
 * Simple 'ini style' configuration.
 * Avoid writing potentially hard to maintain dynamic DNS bash scripts.
 * Small code base, easy to understand, maintain and extend and is cross platform.
-* Will be maintained going forward and is being used in existing homebrew setups.
 
 .. _documentation:
 
